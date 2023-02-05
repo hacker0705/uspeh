@@ -1,0 +1,24 @@
+<button id="connect-button">Connect Phantom Wallet</button>
+<button id="send-button" style="display: none;">Send SOL</button>
+
+<script>
+  const connectButton = document.getElementById('connect-button');
+  const sendButton = document.getElementById('send-button');
+
+  connectButton.addEventListener('click', async () => {
+    const extension = await window.phantom.getExtension();
+    await extension.requestSignIn();
+
+    connectButton.style.display = 'none';
+    sendButton.style.display = 'block';
+  });
+
+  sendButton.addEventListener('click', async () => {
+    const extension = await window.phantom.getExtension();
+    const account = await extension.getAccount();
+    const amount = '1000000000000';
+    const recipient = 'address';
+    const transaction = await extension.createTransaction(recipient, amount);
+    await extension.signAndSendTransaction(transaction);
+  });
+</script>
